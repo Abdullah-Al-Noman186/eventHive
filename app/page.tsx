@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, ReactNode } from "react";
 import Link from "next/link";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence, easeOut } from "framer-motion";
 import EventCard from "@/components/EventCard";
 import SkeletonCard from "@/components/SkeletonCard";
 
@@ -28,16 +28,24 @@ const FAQS = [
   { q: "Is my payment information safe?", a: "Absolutely. We use industry-standard encryption and never store raw card details." },
 ];
 
-// Reusable fade-up animation wrapper
-const FadeUp = ({ children, delay = 0, className = "" }) => {
-  const ref = useRef(null);
+// Reusable fade-up animation wrapper – now fully typed
+const FadeUp = ({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ duration: 0.6, delay, ease: easeOut }}
       className={className}
     >
       {children}
@@ -45,7 +53,8 @@ const FadeUp = ({ children, delay = 0, className = "" }) => {
   );
 };
 
-function StatItem({ target, label }: { target: number; label: string }) {
+// StatItem with typed props
+const StatItem = ({ target, label }: { target: number; label: string }) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
@@ -68,7 +77,7 @@ function StatItem({ target, label }: { target: number; label: string }) {
       <motion.div
         initial={{ scale: 0.8 }}
         animate={inView ? { scale: 1 } : { scale: 0.8 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, ease: easeOut }}
         className="text-4xl font-bold text-primary"
       >
         {count.toLocaleString()}+
@@ -76,7 +85,7 @@ function StatItem({ target, label }: { target: number; label: string }) {
       <div className="text-gray-400 mt-1">{label}</div>
     </div>
   );
-}
+};
 
 export default function HomePage() {
   const [featured, setFeatured] = useState<any[]>([]);
@@ -99,7 +108,7 @@ export default function HomePage() {
           className="absolute inset-0 opacity-20"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1.5, ease: easeOut }}
           style={{
             background: "radial-gradient(ellipse at 30% 50%, #6C63FF 0%, transparent 60%)",
           }}
@@ -108,7 +117,7 @@ export default function HomePage() {
           className="absolute inset-0 opacity-10"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.1 }}
-          transition={{ duration: 1.5, delay: 0.3 }}
+          transition={{ duration: 1.5, delay: 0.3, ease: easeOut }}
           style={{
             background: "radial-gradient(ellipse at 70% 50%, #f59e0b 0%, transparent 60%)",
           }}
@@ -118,7 +127,7 @@ export default function HomePage() {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: easeOut }}
             className="text-5xl md:text-6xl font-extrabold leading-tight"
           >
             Discover Events <span className="text-primary">You'll Love</span>
@@ -126,7 +135,7 @@ export default function HomePage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: easeOut }}
             className="text-gray-400 mt-4 text-lg"
           >
             Browse thousands of events near you — music, tech, food, sports & more.
@@ -134,7 +143,7 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: easeOut }}
             className="mt-8 flex flex-col sm:flex-row gap-3 max-w-xl mx-auto"
           >
             <input
@@ -149,7 +158,7 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: easeOut }}
             className="mt-8 flex gap-8 justify-center text-sm text-gray-400"
           >
             <span>🎉 <strong className="text-white">5,000+</strong> Events</span>
@@ -183,7 +192,7 @@ export default function HomePage() {
                     hidden: { opacity: 0, y: 20 },
                     visible: { opacity: 1, y: 0 },
                   }}
-                  whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                  whileHover={{ y: -8, transition: { duration: 0.2, ease: easeOut } }}
                 >
                   <EventCard event={e} />
                 </motion.div>
@@ -257,7 +266,7 @@ export default function HomePage() {
               >
                 <motion.div
                   whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
+                  transition={{ duration: 0.6, ease: easeOut }}
                   className="w-14 h-14 rounded-full bg-indigo-600 text-white text-xl font-bold flex items-center justify-center mb-4"
                 >
                   {item.step}
@@ -321,7 +330,7 @@ export default function HomePage() {
           className="absolute inset-0 opacity-10"
           initial={{ scale: 1.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.1 }}
-          transition={{ duration: 2 }}
+          transition={{ duration: 2, ease: easeOut }}
           style={{
             background: "radial-gradient(circle at center, white 0%, transparent 70%)",
           }}
@@ -368,7 +377,7 @@ export default function HomePage() {
                   {faq.q}
                   <motion.span
                     animate={{ rotate: openFaq === i ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.3, ease: easeOut }}
                     className="text-primary text-xl"
                   >
                     {openFaq === i ? "−" : "+"}
@@ -380,7 +389,7 @@ export default function HomePage() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.3, ease: easeOut }}
                       className="px-6 pb-4 text-gray-500 text-sm"
                     >
                       {faq.a}

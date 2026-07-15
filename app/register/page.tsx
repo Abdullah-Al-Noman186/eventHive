@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeOut } from "framer-motion";
 import {
   FaUser,
   FaEnvelope,
@@ -13,10 +13,14 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-// Animation variants
+// Animation variants — now using the imported easeOut function
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: easeOut },
+  },
 };
 
 const fieldVariants = {
